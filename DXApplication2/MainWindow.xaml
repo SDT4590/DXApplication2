@@ -1,8 +1,9 @@
-﻿<dx:ThemedWindow
+﻿
+<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:DataGridBindingExampleCore"
     xmlns:conveters="clr-namespace:DataGridBindingExampleCore.Converters"
@@ -16,13 +17,7 @@
     <DockPanel>
         <dxg:GridControl Width="990" 
                          ItemsSource="{Binding SelectedStudent.PlacesOfInterest}"
-                         SelectedItem="{Binding SelectedPlace}"
-                         >
-            <dxg:GridControl.View>
-                <dxg:TableView/>
-            </dxg:GridControl.View>
-            <dxg:GridColumn FieldName="ID" IsSmart="True"/>
-            <dxg:GridColumn FieldName="StudentID" IsSmart="True"/>
+                         SelectedItem="{Binding SelectedPlace}">
             <dxg:GridColumn FieldName="CountryName" IsSmart="True">
                 <dxg:GridColumn.EditSettings>
                     <dxe:ComboBoxEditSettings ItemsSource="{Binding Countries}"
@@ -32,22 +27,68 @@
             </dxg:GridColumn>
             <dxg:GridColumn FieldName="ProvinceID" IsSmart="True">
                 <dxg:GridColumn.EditSettings>
-                    <dxe:ComboBoxEditSettings ItemsSource="{Binding Provinces}" 
-                                  DisplayMember="ProvinceName" 
+                    <dxg:LookUpEditSettings ItemsSource="{Binding Provinces}" 
+                                  DisplayMember="ProvinceName"
                                   ValueMember="ProvinceID"/>
                 </dxg:GridColumn.EditSettings>
+                <dxg:GridColumn.CellEditTemplate>
+                    <DataTemplate>
+                        <dxg:LookUpEdit Name="PART_Editor"
+                        ItemsSource="{Binding Provinces}"  AutoPopulateColumns="False"
+                        ValueMember="ProvinceID" DisplayMember="ProvinceName">
+                            <dxg:LookUpEdit.PopupContentTemplate> 
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="ProvinceID" Visible="False"/>
+                                            <dxg:GridColumn FieldName="ProvinceName"/>
+                                        </dxg:GridControl.Columns>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView AutoWidth="True"/>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEdit.PopupContentTemplate>
+                        </dxg:LookUpEdit>
+                    </DataTemplate>
+                </dxg:GridColumn.CellEditTemplate>
             </dxg:GridColumn>
             <dxg:GridColumn FieldName="DistrictID" IsSmart="True">
                 <dxg:GridColumn.EditSettings>
-                    <dxe:ComboBoxEditSettings ItemsSource="{Binding Districts}" 
+                    <dxg:LookUpEditSettings ItemsSource="{Binding Districts}" 
                                   DisplayMember="DistrictName" 
                                   ValueMember="DistrictID">
-                        <dxe:ComboBoxEditSettings.StyleSettings>
-                            <dxe:ComboBoxStyleSettings/>
-                        </dxe:ComboBoxEditSettings.StyleSettings>
-                    </dxe:ComboBoxEditSettings>
+                    </dxg:LookUpEditSettings>
                 </dxg:GridColumn.EditSettings>
+                <dxg:GridColumn.CellEditTemplate>
+                    <DataTemplate>
+                        <dxg:LookUpEdit Name="PART_Editor"
+                        ItemsSource="{Binding Districts}"  AutoPopulateColumns="False"
+                        ValueMember="DistrictID" DisplayMember="DistrictName">
+                            <dxg:LookUpEdit.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="DistrictID" Visible="False"/>
+                                            <dxg:GridColumn FieldName="DistrictName"/>
+                                        </dxg:GridControl.Columns>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView AutoWidth="True"/>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEdit.PopupContentTemplate>
+                        </dxg:LookUpEdit>
+                    </DataTemplate>
+                </dxg:GridColumn.CellEditTemplate>
             </dxg:GridColumn>
+            <dxg:GridControl.View>
+                <dxg:TableView AutoWidth="True" ShownEditor="OnTableViewShownEditor">
+                    <!--<dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EventToCommand EventName="ShownEditor" Command="{Binding Path=UpdateItemsSourceCommand}" PassEventArgsToCommand="True" />
+                    </dxmvvm:Interaction.Behaviors>-->
+                </dxg:TableView>
+            </dxg:GridControl.View>
         </dxg:GridControl>
     </DockPanel>
-</dx:ThemedWindow>
+</Window>

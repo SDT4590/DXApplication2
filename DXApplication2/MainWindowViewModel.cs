@@ -1,10 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DataGridBindingExampleCore.Models;
+using DevExpress.Xpf.Editors;
+using DevExpress.Xpf.Grid;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace DataGridBindingExampleCore
 {
@@ -21,33 +24,8 @@ namespace DataGridBindingExampleCore
         ObservableCollection<ProvincesModel> provinces;
         [ObservableProperty]
         ObservableCollection<DistrictsModel> districts;
-
-        //public object CurrentProvinces
-        //{
-        //    get
-        //    {
-        //        var countryName = SelectedPlace?.GetType().GetProperty("CountryName")?.GetValue(SelectedPlace, null);
-        //        if (countryName == null) return null;
-        //        return new ObservableCollection<ProvincesModel>(Provinces.Where((p) => p.CountryName == countryName.ToString()));
-        //    }
-        //}
-        //public object CurrentDistricts
-        //{
-        //    get
-        //    {
-        //        var provinceID = SelectedPlace?.GetType().GetProperty("ProvinceID")?.GetValue(SelectedPlace, null);
-        //        if (provinceID == null) return null;
-        //        return new ObservableCollection<DistrictsModel>(Districts.Where((p) => p.ProvinceID == (int)provinceID));
-        //    }
-        //}
-
-        //[ObservableProperty]
-        //object selectedPlace;
-        
-
         [ObservableProperty]
         StudentsModel selectedStudent;
-
 
         int currentIndex = 0;
 
@@ -69,11 +47,15 @@ namespace DataGridBindingExampleCore
             this.SelectedStudent = Students[currentIndex];
         }
 
+        //public ICommand UpdateItemsSourceCommand { get; private set; }
+
+
         public MainWindowViewModel()
         {
+            ////UpdateItemsSourceCommand = new RelayCommand<EditorEventArgs>(OnTableViewShownEditor);
+
             LoadDataAsync();
         }
-
 
         private async void LoadDataAsync()
         {
@@ -85,9 +67,36 @@ namespace DataGridBindingExampleCore
             this.Districts = new ObservableCollection<DistrictsModel>(await DAL.LoadDistrictsAsync());
 
             this.SelectedStudent = Students.FirstOrDefault();
-            OnPropertyChanged(nameof(SelectedStudent));  // Notify the UI that SelectedStudent has changed
+            OnPropertyChanged(nameof(SelectedStudent));
 
             IsLoading = false;
         }
+
+
+
+        //private void OnTableViewShownEditor(EditorEventArgs e)
+        //{
+        //    if (e.Column.FieldName == "ProvinceID")
+        //    {
+        //        LookUpEditBase editor = e.Editor as LookUpEditBase;
+        //        if (editor == null)
+        //            return;
+        //        TableView view = (TableView)e.Source;
+        //        string countryName = (string)view.Grid.GetCellValue(e.RowHandle, "CountryName");
+        //        editor.ItemsSource = Provinces.Where(province => province.CountryName == countryName).ToList();
+        //    }
+        //    else if (e.Column.FieldName == "DistrictID")
+        //    {
+        //        LookUpEditBase editor = e.Editor as LookUpEditBase;
+        //        if (editor == null)
+        //            return;
+        //        TableView view = (TableView)e.Source;
+        //        int provinceID = (int)view.Grid.GetCellValue(e.RowHandle, "ProvinceID");
+        //        editor.ItemsSource = Districts.Where(district => district.ProvinceID == provinceID).ToList();
+        //    }
+        //}
+
+
     }
+
 }

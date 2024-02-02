@@ -54,3 +54,37 @@ namespace DataGridBindingExampleCore
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//public static async Task<List<ProvincesModel>> LoadProvincesAsync(string countryName)
+//{
+//    using (IDbConnection conn = new SqlConnection(ConnString))
+//    {
+//        var result = await conn.QueryAsync<ProvincesModel>("SELECT * FROM Provinces WHERE CountryName = @CountryName", new { CountryName = countryName });
+//        return result.ToList();
+//    }
+//}
+//public static async Task<List<DistrictsModel>> LoadDistrictsAsync(int provinceId)
+//{
+//    using (IDbConnection conn = new SqlConnection(ConnString))
+//    {
+//        var result = await conn.QueryAsync<DistrictsModel>("SELECT * FROM Districts WHERE ProvinceID = @ProvinceID", new { ProvinceID = provinceId });
+//        return result.ToList();
+//    }
+//}
